@@ -1,61 +1,129 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Event Ticketing API
 
-## About Laravel
+A RESTful API for managing events, venues, and ticket bookings. This platform allows users to view, create, and manage events, as well as book and manage tickets.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Requirements
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP >= 8.1
+- Composer
+- MySQL or MariaDB
+- Laravel 12.x
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Installation
 
-## Learning Laravel
+### Step 1: Clone the repository
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Clone the repository to your local machine:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+git clone [https://github.com/fisnikhz/inc-event-ticketing.git]
+cd inc-event-ticketing
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Step 2: Install Dependencies
 
-## Laravel Sponsors
+Install the required PHP dependencies via Composer:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+composer install
+```
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+### Step 3:  Set Up Environment Variables
 
-## Contributing
+```bash
+cp .env.example .env
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Code of Conduct
+### Step 4: Generate Application Key
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan key:generate
+```
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Step 5: Run Migrations and Seeders
 
-## License
+```bash
+php artisan migrate --seed
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+### Step 6: Set Storage Permissions
+
+```bash
+chmod -R 775 bootstrap/cache
+```
+
+
+### Step 7: Run the Development Server
+Run the Laravel development server:
+
+```bash
+php artisan serve
+```
+
+
+By default, the API will be available at http://localhost:8000.
+
+### Step 8: Authentication
+This API uses Laravel Sanctum for authentication. To access protected routes, users must authenticate by logging in, and they will receive an API token to be used in subsequent requests.
+
+```bash
+API Endpoints
+Public Routes
+POST /register: Register a new user.
+
+POST /login: Login a user and get an API token.
+
+Protected Routes (Requires Authentication)
+Once authenticated (with a valid token), users can access the following routes:
+
+Event Routes
+GET /all/events: Get a list of all upcoming events.
+
+POST /store/event: Create a new event.
+
+GET /find/events/{event}: View details of a specific event.
+
+PUT /update/events/{event}: Update an existing event.
+
+DELETE /delete/events/{event}: Delete an event.
+
+Venue Routes
+GET /all/venues: Get a list of all venues.
+
+POST /store/venue: Create a new venue.
+
+GET /find/venues/{venue}: View details of a specific venue.
+
+PUT /update/venues/{venue}: Update an existing venue.
+
+DELETE /delete/venues/{venue}: Delete a venue.
+
+Ticket Routes
+GET /all/tickets: Get a list of all tickets.
+
+POST /store/ticket: Book a new ticket for an event.
+
+GET /find/tickets/{ticket}: View details of a specific ticket.
+
+PUT /update/tickets/{ticket}: Update an existing ticket.
+
+DELETE /delete/tickets/{ticket}: Delete a ticket.
+
+Search Routes
+GET /search: Search events by name or venue.
+
+User Profile
+PUT /profile: Update user profile information.
+
+Rate Limiting
+The /store/ticket route has a rate limit of 3 requests per minute (using the throttle:3,1 middleware) to prevent abuse.
+
+Security
+Authentication: Uses Laravel Sanctum for API authentication. Users must authenticate and pass a valid bearer token in the Authorization header to access protected routes.
+
+Rate Limiting: Some routes have rate limits to ensure fair usage and prevent abuse, such as booking tickets.
